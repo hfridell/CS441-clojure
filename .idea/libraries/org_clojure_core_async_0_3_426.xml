@@ -1,0 +1,30 @@
+<component name="libraryTable">
+  <library name="org.clojure:core.async:0.3.426" type="repository">
+    <properties maven-id="org.clojure:core.async:0.3.426" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/core.async/0.3.426/core.async-0.3.426.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/clojurescript/0.0-2311/clojurescript-0.0-2311.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.4.0/clojure-1.4.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/javascript/closure-compiler/v20140625/closure-compiler-v20140625.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/javascript/closure-compiler-externs/v20140625/closure-compiler-externs-v20140625.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/args4j/args4j/2.0.26/args4j-2.0.26.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/17.0/guava-17.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/json/json/20090211/json-20090211.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/google-closure-library/0.0-20140718-946a7d39/google-closure-library-0.0-20140718-946a7d39.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/google-closure-library-third-party/0.0-20140718-946a7d39/google-closure-library-third-party-0.0-20140718-946a7d39.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/data.json/0.2.3/data.json-0.2.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/mozilla/rhino/1.7R4/rhino-1.7R4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/tools.reader/0.8.4/tools.reader-0.8.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/tools.analyzer.jvm/0.7.0/tools.analyzer.jvm-0.7.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/tools.analyzer/0.6.9/tools.analyzer-0.6.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/core.memoize/0.5.9/core.memoize-0.5.9.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/core.cache/0.6.5/core.cache-0.6.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/data.priority-map/0.0.7/data.priority-map-0.0.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm-all/4.2/asm-all-4.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
