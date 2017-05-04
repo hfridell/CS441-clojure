@@ -1,15 +1,15 @@
-(ns QSort
-  (:import (java.io BufferedReader)))
-(import '[java.util.concurrent Executors ExecutorService Callable])
-(use 'clojure.java.io)
+(ns QSort)
 
+(import '[java.util.concurrent Executors])
+(use 'clojure.java.io)
+;(require '[clojure.core.reducers :as r])
 
 (defn get-lines [fname]
   (doall
     (map read-string
       (clojure.string/split-lines
          (slurp fname)))))
-
+(def numberList (get-lines "numbers_txt.txt"))
 
 (defn qSort [list]
     (let [pivot (first list)]
@@ -19,41 +19,77 @@
                   (qSort (filter #(> % pivot) list))))))
 
 
-(def threadCount 32)
-(set-agent-send-executor! (Executors/newFixedThreadPool threadCount))
-(defn qSort-concur [list]
-  (let [pivot (first list)
-        lesser (agent ())
-        greater (agent ())]
+(defn qSort-concur1 [list]
+  (let [pivot (first list)]
     (when pivot
-      (lazy-cat @(send lesser (qSort-concur (filter #(< % pivot) list)))
-                (filter #(= % pivot) list)
-                @(send greater(qSort-concur (filter #(> % pivot) list)))))))
+        (lazy-cat @(future(qSort-concur1 (filter #(< % pivot) list)))
+                  (filter #(= % pivot) list)
+                  @(future(qSort-concur1 (filter #(> % pivot) list)))))))
 
-(def numberList (get-lines "numbers_txt.txt"))
-;; Check if sorted
-;;(println (apply <= (qSort numberList)))
+
+(defn qSort-concur2 [list]
+  (let [pivot (first list)]
+    (when pivot
+      @(future(lazy-cat (qSort-concur2 (filter #(< % pivot) list))
+                        (filter #(= % pivot) list)
+                        (qSort-concur2 (filter #(> % pivot) list)))))))
+
+(defn qSort-concur [list]
+  (when (first list)
+    (let [pivot (first list)
+          less (future (doall(filter #(< % pivot) list)))
+          more (future (doall(filter #(> % pivot) list)))]
+      @(future(lazy-cat (qSort-concur @less)
+                        (doall (filter #(= % pivot) list))
+                        (qSort-concur @more))))))
+
+
+
+;; Does it run?
+;;(qSort-concur numberList)
+;; Is it sorted?
+;(println (apply <= (qSort numberList)))
 ;;(println (apply <= (qSort-concur numberList)))
-(print (qSort-concur numberList))
-;(println "Threads: 1")
-;(time (qSort numberList))
-;(time (qSort numberList))
-;(time (qSort numberList))
-;(time (qSort numberList))
-;(time (qSort numberList))
+;; Is it really sorted?
+;;(println (take 30 (qSort-concur numberList)))
+
+;;(time (apply <= (qSort-concur numberList)))
 
 (defn timing [threads]
-  (set-agent-send-executor! (Executors/newFixedThreadPool threads))
+  ; limit threads agents/futures can create
+  ;https://github.com/clojure/clojure/blob/clojure-1.9.0-alpha14/src/clj/clojure/core.clj#L2085
+  ;https://github.com/clojure/clojure/blob/clojure-1.9.0-alpha14/src/clj/clojure/core.clj#L6838
+  (set-agent-send-off-executor! (Executors/newFixedThreadPool threads))
   (print "Threads: ")
   (println threads)
-  (time (qSort-concur numberList))
-  (time (qSort-concur numberList))
-  (time (qSort-concur numberList))
-  (time (qSort-concur numberList))
-  (time (qSort-concur numberList)))
+  (time (apply <= (qSort-concur numberList)))
+  (time (apply <= (qSort-concur numberList)))
+  (time (apply <= (qSort-concur numberList)))
+  (time (apply <= (qSort-concur numberList)))
+  (time (apply <= (qSort-concur numberList))))
 
-;(timing 2)
-;(timing 4)
-;(timing 8)
-;(timing 16)
-;(timing 32)
+
+
+
+; Benchmark
+;(println "Benchmark")
+;(time (apply <=(sort numberList)))
+;(time (apply <= (qSort numberList)))
+ ;;Run sort without future overhead
+(println "Threads: 1 (no future overhead)")
+(time (apply <=(qSort numberList)))
+(time (apply <=(qSort numberList)))
+(time (apply <=(qSort numberList)))
+(time (apply <=(qSort numberList)))
+(time (apply <=(qSort numberList)))
+
+(timing 1)
+(timing 2)
+(timing 4)
+(timing 8)
+(timing 16)
+(timing 32)
+
+
+;;Kill threadpools
+(shutdown-agents)
