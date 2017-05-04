@@ -27,21 +27,14 @@
                   @(future(qSort-concur1 (filter #(> % pivot) list)))))))
 
 
-(defn qSort-concur2 [list]
-  (let [pivot (first list)]
-    (when pivot
-      @(future(lazy-cat (qSort-concur2 (filter #(< % pivot) list))
-                        (filter #(= % pivot) list)
-                        (qSort-concur2 (filter #(> % pivot) list)))))))
-
 (defn qSort-concur [list]
   (when (first list)
     (let [pivot (first list)
-          less (future (doall(filter #(< % pivot) list)))
-          more (future (doall(filter #(> % pivot) list)))]
-      @(future(lazy-cat (qSort-concur @less)
-                        (doall (filter #(= % pivot) list))
-                        (qSort-concur @more))))))
+          lSort (future (qSort-concur (doall (filter #(< % pivot) list))))
+          rSort (future (qSort-concur (doall (filter #(> % pivot) list))))
+          equal (doall (filter #(= % pivot) list))]
+      (lazy-cat @lSort equal @rSort))))
+
 
 
 
@@ -52,7 +45,6 @@
 ;;(println (apply <= (qSort-concur numberList)))
 ;; Is it really sorted?
 ;;(println (take 30 (qSort-concur numberList)))
-
 ;;(time (apply <= (qSort-concur numberList)))
 
 (defn timing [threads]
@@ -68,14 +60,14 @@
   (time (apply <= (qSort-concur numberList)))
   (time (apply <= (qSort-concur numberList))))
 
-
-
-
 ; Benchmark
-;(println "Benchmark")
-;(time (apply <=(sort numberList)))
-;(time (apply <= (qSort numberList)))
- ;;Run sort without future overhead
+(println "Benchmark")
+(time (apply <= (sort numberList)))
+(time (apply <= (sort numberList)))
+(time (apply <= (sort numberList)))
+(time (apply <= (sort numberList)))
+(time (apply <= (sort numberList)))
+;;Run sort without future overhead
 (println "Threads: 1 (no future overhead)")
 (time (apply <=(qSort numberList)))
 (time (apply <=(qSort numberList)))
